@@ -18,7 +18,8 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
 }
 
 void s21_remove_matrix(matrix_t *A) {
-  if (A == NULL || A->matrix == NULL || A->rows <= 0 || A->columns <= 0) {
+  int r1 = !s21_matrix_correct(A);
+  if (r1) {
     return;
   }
   for (int i = 0; i < A->rows; i++) {
@@ -31,12 +32,11 @@ void s21_remove_matrix(matrix_t *A) {
 
 int s21_eq_matrix(matrix_t *A, matrix_t *B) {
   int result = SUCCESS;
-  int bad_rule_1 =
-      A == NULL || A->matrix == NULL || A->rows <= 0 || A->columns <= 0;
-  int bad_rule_2 =
-      B == NULL || B->matrix == NULL || B->rows <= 0 || B->columns <= 0;
-  int bad_rule_3 = A->rows != B->rows || A->columns != B->columns;
-  if (bad_rule_1 || bad_rule_2 || bad_rule_3) {
+  int r1 = !s21_matrix_correct(A);
+  int r2 = !s21_matrix_correct(B);
+  int r3 = !s21_matrices_same_size(A, B);
+
+  if (r1 || r2 || r3) {
     result = FAILURE;
   } else {
     for (int i = 0; i < A->rows; i++) {
@@ -87,6 +87,59 @@ int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
     for (int i = 0; i < A->rows; i++) {
       for (int j = 0; j < A->columns; j++) {
         result->matrix[i][j] = A->matrix[i][j] - B->matrix[i][j];
+      }
+    }
+  }
+  return status;
+}
+
+int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
+  operation_status status = OK;
+  bool r1 = !s21_matrix_correct(A);
+  bool r2 = !s21_matrix_correct(result);
+  bool r3 = !s21_matrices_same_size(A, result);
+  if (r1 || r2) {
+    status = WRONG_MATRIX;
+  } else if (r3) {
+    status = CALCULATION_ERROR;
+  } else {
+    for (int i = 0; i < A->rows; i++) {
+      for (int j = 0; j < A->columns; j++) {
+        result->matrix[i][j] = A->matrix[i][j] * number;
+      }
+    }
+  }
+  return status;
+}
+
+int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
+  operation_status status = OK;
+  bool r1 = !s21_matrix_correct(A);
+  bool r2 = !s21_matrix_correct(B);
+  bool r3 = !s21_matrix_correct(result);
+  bool r4 = A->columns != B->rows;
+  bool r5 = A->rows != result->rows || B->columns != result->columns;
+  if (r1 || r2 || r3) {
+    status = WRONG_MATRIX;
+  } else if (r4 || r5) {
+    status = CALCULATION_ERROR;
+  } else {
+    // for (int i = 0; i < A->rows; i++) {
+    //   for (int j = 0; j < B->columns; j++) {
+    //     result->matrix[i][j] =
+    //   }
+    // }
+    int i_index = 0, j_index = 0;
+    while (i_index != A->rows && j_index != B->columns) {
+      
+      for (int i = 0, j = 0; i < A->columns && j < B->rows; i++, j++) {
+        result->matrix[i_index][j_index] += A->matrix[i_index][i] * B->matrix[j][j_index];
+      }
+
+      if (j_index == B->columns-1) {
+        i_index++;j_index=0;
+      } else {
+        j_index++;
       }
     }
   }
