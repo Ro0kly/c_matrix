@@ -166,28 +166,6 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
   return status;
 }
 
-double s21_determinant_recursive(matrix_t *A) {
-  bool r1 = !s21_matrix_correct(A);
-  if (r1) {
-    return 0;
-  }
-  double det = 0;
-  for (int i = 0; i < A->columns; i++) {
-    matrix_t m = {0};
-    s21_create_matrix(A->rows - 1, A->columns - 1, &m);
-    s21_minor_matrix(A, i, &m);
-    s21_print_matrix(&m);
-    if (m.rows == 2 && m.columns == 2) {
-      double res = 0;
-      s21_2x2_determinant(&m, &res);
-      det += pow(-1, 1 + i + 1) * A->matrix[0][i] * res;
-    } else {
-      det += pow(-1, 1 + i + 1) * A->matrix[0][i] * s21_determinant_recursive(&m);
-    }
-  }
-  return det;
-}
-
 int s21_determinant(matrix_t *A, double *result) {
   operation_status status = OK;
   bool r1 = !s21_matrix_correct(A);
@@ -206,7 +184,24 @@ int s21_determinant(matrix_t *A, double *result) {
   return status;
 }
 
-//EXAMPLE
+int s21_calc_complements(matrix_t *A, matrix_t *result) {
+  for (int i = 0; i < A->rows; i++) {
+    for (int j = 0; j < A->columns; j++) {
+      double res = 0;
+      matrix_t tmp = {0};
+      s21_create_matrix(A->rows-1, A->columns-1, &tmp);
+      s21_minor_matrix(A, i, j, &tmp);
+      s21_print_matrix(&tmp);
+      double det = 0;
+      s21_determinant(&tmp, &det);
+      res = det * pow(-1, i + 1 + j + 1);
+      result->matrix[i][j] = res;
+    }
+  }
+  return 0;
+}
+
+// EXAMPLE
 
 // double find_det(matrix_t *A, double *total) {
 //   *total = 0;
