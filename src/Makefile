@@ -12,9 +12,15 @@ s21_matrix.a:
 test:
 	$(CC) $(CFLAGS) $(TESTFILE) s21_matrix.a -o $(TARGET) -lcheck -lm -lsubunit
 	./$(TARGET)
+gcov_report: clean s21_matrix.a
+	$(CC) $(CFLAGS) --coverage $(TESTFILE) ./matrix_operations/*.c s21_matrix.a -o gcovreport -lcheck -lm -lsubunit
+	./gcovreport
+	lcov -t "gcovreport" -o gcovreport.info -c -d .
+	genhtml -o report gcovreport.info
+	open report/index.html
 clean:
-	rm -rf ./*.o *.a
+	rm -rf ./*.o *.a *.gcno *.gcda gcovreport gcovreport.info report $(TARGET)
 valgrind:
-	valgrind --tool=memcheck --leak-check=yes --track-origins=yes -s ./$(TARGET)
+	valgrind --tool=memcheck --leak-check=yes --track-origins=yes -s --leak-check=full --show-leak-kinds=all ./$(TARGET)
 leaks:
 	leaks -atExit -- ./$(TARGET)

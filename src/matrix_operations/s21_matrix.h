@@ -18,8 +18,8 @@ int s21_print_matrix(matrix_t *matrix);
 bool s21_matrix_correct(matrix_t *matrix);
 bool s21_matrices_same_size(matrix_t *A, matrix_t *B);
 int s21_fill_matrix(matrix_t *matrix, double value);
-int s21_2x2_determinant(matrix_t *matrix, double *result);
-int s21_minor_matrix(matrix_t *matrix, int exclude_row_index, int exclude_column_index,
+void s21_2x2_determinant(matrix_t *matrix, double *result);
+void s21_minor_matrix(matrix_t *matrix, int exclude_row_index, int exclude_column_index,
                               matrix_t *result);
 double s21_determinant_recursive(matrix_t *A);
 

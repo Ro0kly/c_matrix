@@ -6,7 +6,7 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
   bool r2 = !s21_matrix_correct(result);
   if (r1 || r2) {
     status = WRONG_MATRIX;
-  } else if (A->rows != result->rows || A->columns != result->columns) {
+  } else if (A->rows != result->rows || A->columns != result->columns || A->rows == 2 || A->columns == 2) {
     status = CALCULATION_ERROR;
   } else {
 for (int i = 0; i < A->rows; i++) {

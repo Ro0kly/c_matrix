@@ -136,6 +136,22 @@ START_TEST(s21_eq_matrix_5) {
 }
 END_TEST
 
+START_TEST(s21_eq_matrix_6) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t n = {0};
+  s21_create_matrix(4, 4, &m);
+  s21_fill_matrix(&m,1.123456);
+  s21_create_matrix(3, 3, &n);
+  s21_fill_matrix(&n,1.123456);
+
+  status = s21_eq_matrix(&m,&n);
+  ck_assert_int_eq(status, FAILURE);
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&n);
+}
+END_TEST
+
 // METHOD: s21_sum_matrix
 START_TEST(s21_sum_matrix_1) {
   int status = 0;
@@ -189,6 +205,25 @@ START_TEST(s21_sum_matrix_3) {
 
   status = s21_sum_matrix(&m,&n,&res);
   ck_assert_int_eq(status, CALCULATION_ERROR);
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&n);
+  s21_remove_matrix(&res);
+}
+END_TEST
+
+START_TEST(s21_sum_matrix_4) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t n = {0};
+  matrix_t res = {0};
+  s21_create_matrix(4, 4, &m);
+  s21_fill_matrix(&m,1.5);
+  s21_create_matrix(-1, 4, &n);
+  s21_fill_matrix(&n,2.3);
+  s21_create_matrix(4, 4, &res);
+
+  status = s21_sum_matrix(&m,&n,&res);
+  ck_assert_int_eq(status, WRONG_MATRIX);
   s21_remove_matrix(&m);
   s21_remove_matrix(&n);
   s21_remove_matrix(&res);
@@ -303,55 +338,55 @@ START_TEST(s21_mult_number_3) {
 }
 END_TEST
 
-// MATHOD: s21_mult_matrix
-// START_TEST(s21_mult_matrix_1) {
-//   int status = 0;
-//   matrix_t m = {0};
-//   matrix_t n = {0};
-//   matrix_t res = {0};
-//   matrix_t res_f = {0};
-//   s21_create_matrix(3, 2, &m);
-//   s21_create_matrix(2, 3, &n);
-//   s21_create_matrix(3, 3, &res);
-//   s21_create_matrix(3, 3, &res_f);
+// METHOD: s21_mult_matrix
+START_TEST(s21_mult_matrix_1) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t n = {0};
+  matrix_t res = {0};
+  matrix_t res_f = {0};
+  s21_create_matrix(3, 2, &m);
+  s21_create_matrix(2, 3, &n);
+  s21_create_matrix(3, 3, &res);
+  s21_create_matrix(3, 3, &res_f);
 
-//   m.matrix[0][0] = 1;
-//   m.matrix[0][1] = 4;
-//   m.matrix[1][0] = 2;
-//   m.matrix[1][1] = 5;
-//   m.matrix[2][0] = 3;
-//   m.matrix[2][1] = 6;
+  m.matrix[0][0] = 1;
+  m.matrix[0][1] = 4;
+  m.matrix[1][0] = 2;
+  m.matrix[1][1] = 5;
+  m.matrix[2][0] = 3;
+  m.matrix[2][1] = 6;
 
-//   n.matrix[0][0] = 1;
-//   n.matrix[0][1] = -1;
-//   n.matrix[0][2] = 1;
-//   n.matrix[1][0] = 2;
-//   n.matrix[1][1] = 3;
-//   n.matrix[1][2] = 4;
+  n.matrix[0][0] = 1;
+  n.matrix[0][1] = -1;
+  n.matrix[0][2] = 1;
+  n.matrix[1][0] = 2;
+  n.matrix[1][1] = 3;
+  n.matrix[1][2] = 4;
 
-//   res_f.matrix[0][0] = 9;
-//   res_f.matrix[0][1] = 11;
-//   res_f.matrix[0][2] = 17;
-//   res_f.matrix[1][0] = 12;
-//   res_f.matrix[1][1] = 13;
-//   res_f.matrix[1][2] = 22;
-//   res_f.matrix[2][0] = 15;
-//   res_f.matrix[2][1] = 15;
-//   res_f.matrix[2][2] = 27;
+  res_f.matrix[0][0] = 9;
+  res_f.matrix[0][1] = 11;
+  res_f.matrix[0][2] = 17;
+  res_f.matrix[1][0] = 12;
+  res_f.matrix[1][1] = 13;
+  res_f.matrix[1][2] = 22;
+  res_f.matrix[2][0] = 15;
+  res_f.matrix[2][1] = 15;
+  res_f.matrix[2][2] = 27;
 
-//   status = s21_mult_matrix(&m,&n,&res);
-//   ck_assert_int_eq(status, OK);
-//   for (int i = 0; i < 3; i++) {
-//     for (int j = 0; j < 3; j++) {
-//       ck_assert_double_eq(res.matrix[i][j],res_f.matrix[i][j]);
-//     }
-//   }
-//   s21_remove_matrix(&m);
-//   s21_remove_matrix(&n);
-//   s21_remove_matrix(&res);
-//   s21_remove_matrix(&res_f);
-// }
-// END_TEST
+  status = s21_mult_matrix(&m,&n,&res);
+  ck_assert_int_eq(status, OK);
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      ck_assert_double_eq(res.matrix[i][j],res_f.matrix[i][j]);
+    }
+  }
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&n);
+  s21_remove_matrix(&res);
+  s21_remove_matrix(&res_f);
+}
+END_TEST
 
 START_TEST(s21_mult_matrix_2) {
   int status = 0;
@@ -548,8 +583,42 @@ START_TEST(s21_calc_complements_3) {
 }
 END_TEST
 
+START_TEST(s21_calc_complements_4) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t res = {0};
+  s21_create_matrix(2, 2, &m);
+  s21_create_matrix(3, 3, &res);
+
+  status = s21_calc_complements(&m,&res);
+  ck_assert_int_eq(status, CALCULATION_ERROR);
+
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&res);
+}
+END_TEST
+
 // METHOD: s21_determinant
+
 START_TEST(s21_determinant_1) {
+  int status = 0;
+  matrix_t m = {0};
+  double res = 0;
+  s21_create_matrix(2, 2, &m);
+  m.matrix[0][0] = 9;
+  m.matrix[0][1] = 2;
+  m.matrix[1][0] = 3;
+  m.matrix[1][1] = 1;
+
+  status = s21_determinant(&m,&res);
+  ck_assert_int_eq(status, OK);
+  ck_assert_double_eq(3,res);
+
+  s21_remove_matrix(&m);
+}
+END_TEST
+
+START_TEST(s21_determinant_2) {
   int status = 0;
   matrix_t m = {0};
   double res = 0;
@@ -575,7 +644,7 @@ START_TEST(s21_determinant_1) {
 }
 END_TEST
 
-START_TEST(s21_determinant_2) {
+START_TEST(s21_determinant_3) {
   int status = 0;
   matrix_t m = {0};
   double res = 0;
@@ -609,7 +678,7 @@ START_TEST(s21_determinant_2) {
 }
 END_TEST
 
-START_TEST(s21_determinant_3) {
+START_TEST(s21_determinant_4) {
   int status = 0;
   matrix_t m = {0};
   double res = 0;
@@ -653,7 +722,7 @@ m.matrix[4][4] = 3;
 }
 END_TEST
 
-START_TEST(s21_determinant_4) {
+START_TEST(s21_determinant_5) {
   int status = 0;
   matrix_t m = {0};
   double res = 0;
@@ -666,7 +735,7 @@ START_TEST(s21_determinant_4) {
 }
 END_TEST
 
-START_TEST(s21_determinant_5) {
+START_TEST(s21_determinant_6) {
   int status = 0;
   matrix_t m = {0};
   s21_create_matrix(5, 5, &m);
@@ -752,6 +821,34 @@ START_TEST(s21_inverse_matrix_3) {
   int status = 0;
   matrix_t m = {0};
   matrix_t res = {0};
+  matrix_t res_f = {0};
+  s21_create_matrix(2, 2, &m);
+  s21_create_matrix(2, 2, &res);
+  s21_create_matrix(2, 2, &res_f);
+
+  m.matrix[0][0] = 9;
+  m.matrix[0][1] = 2;
+  m.matrix[1][0] = 3;
+  m.matrix[1][1] = 1;
+
+  res_f.matrix[0][0] = 1.0 / 3.0;
+  res_f.matrix[0][1] = -2.0 / 3.0;
+  res_f.matrix[1][0] = 1;
+  res_f.matrix[1][1] = 3;
+
+  status = s21_inverse_matrix(&m,&res);
+  ck_assert_int_eq(status, CALCULATION_ERROR);
+
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&res);
+  s21_remove_matrix(&res_f);
+}
+END_TEST
+
+START_TEST(s21_inverse_matrix_4) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t res = {0};
   s21_create_matrix(3, 3, &m);
   s21_create_matrix(3, 3, &res);
 
@@ -763,7 +860,7 @@ START_TEST(s21_inverse_matrix_3) {
 }
 END_TEST
 
-START_TEST(s21_inverse_matrix_4) {
+START_TEST(s21_inverse_matrix_5) {
   int status = 0;
   matrix_t m = {0};
   matrix_t res = {0};
@@ -772,6 +869,21 @@ START_TEST(s21_inverse_matrix_4) {
 
   status = s21_inverse_matrix(&m,&res);
   ck_assert_int_eq(status, CALCULATION_ERROR);
+
+  s21_remove_matrix(&m);
+  s21_remove_matrix(&res);
+}
+END_TEST
+
+START_TEST(s21_inverse_matrix_6) {
+  int status = 0;
+  matrix_t m = {0};
+  matrix_t res = {0};
+  s21_create_matrix(3, 3, &m);
+  s21_create_matrix(3, -1, &res);
+
+  status = s21_inverse_matrix(&m,&res);
+  ck_assert_int_eq(status, WRONG_MATRIX);
 
   s21_remove_matrix(&m);
   s21_remove_matrix(&res);
@@ -796,16 +908,18 @@ int main() {
   tcase_add_test(tc_core, s21_eq_matrix_3);
   tcase_add_test(tc_core, s21_eq_matrix_4);
   tcase_add_test(tc_core, s21_eq_matrix_5);
+  tcase_add_test(tc_core, s21_eq_matrix_6);
   tcase_add_test(tc_core, s21_sum_matrix_1);
   tcase_add_test(tc_core, s21_sum_matrix_2);
   tcase_add_test(tc_core, s21_sum_matrix_3);
+  tcase_add_test(tc_core, s21_sum_matrix_4);
   tcase_add_test(tc_core, s21_sub_matrix_1);
   tcase_add_test(tc_core, s21_sub_matrix_2);
   tcase_add_test(tc_core, s21_sub_matrix_3);
   tcase_add_test(tc_core, s21_mult_number_1);
   tcase_add_test(tc_core, s21_mult_number_2);
   tcase_add_test(tc_core, s21_mult_number_3);
-  //tcase_add_test(tc_core, s21_mult_matrix_1);
+  tcase_add_test(tc_core, s21_mult_matrix_1); //--
   tcase_add_test(tc_core, s21_mult_matrix_2);
   tcase_add_test(tc_core, s21_mult_matrix_3);
   tcase_add_test(tc_core, s21_mult_matrix_4);
@@ -815,15 +929,19 @@ int main() {
   tcase_add_test(tc_core, s21_calc_complements_1);
   tcase_add_test(tc_core, s21_calc_complements_2);
   tcase_add_test(tc_core, s21_calc_complements_3);
+  tcase_add_test(tc_core, s21_calc_complements_4);
   tcase_add_test(tc_core, s21_determinant_1);
   tcase_add_test(tc_core, s21_determinant_2);
   tcase_add_test(tc_core, s21_determinant_3);
   tcase_add_test(tc_core, s21_determinant_4);
   tcase_add_test(tc_core, s21_determinant_5);
+  tcase_add_test(tc_core, s21_determinant_6);
   tcase_add_test(tc_core, s21_inverse_matrix_1);
   tcase_add_test(tc_core, s21_inverse_matrix_2);
   tcase_add_test(tc_core, s21_inverse_matrix_3);
   tcase_add_test(tc_core, s21_inverse_matrix_4);
+  tcase_add_test(tc_core, s21_inverse_matrix_5);
+  tcase_add_test(tc_core, s21_inverse_matrix_6);
 
   srunner_run_all(sr, CK_ENV);
   nf = srunner_ntests_failed(sr);

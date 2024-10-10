@@ -14,14 +14,17 @@ double det = 0;
   if (det != 0) {
     matrix_t tmp = {0};
     s21_create_matrix(A->rows,A->columns,&tmp);
-    s21_calc_complements(A,&tmp);
-    s21_transpose(&tmp, result);
+    if (s21_calc_complements(A,&tmp) == OK) {
+      s21_transpose(&tmp, result);
     for (int i = 0; i < result->rows; i++) {
       for (int j = 0; j < result->rows; j++) {
         result->matrix[i][j] *= -1;
       }
     }
     s21_remove_matrix(&tmp);
+    } else {
+      status = CALCULATION_ERROR;
+    }
   } else {
     status = CALCULATION_ERROR;
   }
