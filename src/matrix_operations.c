@@ -196,7 +196,22 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
       s21_determinant(&tmp, &det);
       res = det * pow(-1, i + 1 + j + 1);
       result->matrix[i][j] = res;
+      s21_remove_matrix(&tmp);
     }
+  }
+  return 0;
+}
+
+int s21_inverse_matrix(matrix_t *A, matrix_t *result){
+  double det = 0;
+  s21_determinant(A,&det);
+  printf("det: %lf\n", det);
+  if (det != 0) {
+    matrix_t tmp = {0};
+    s21_create_matrix(A->rows,A->columns,&tmp);
+    s21_calc_complements(A,&tmp);
+    s21_transpose(&tmp, result);
+    s21_remove_matrix(&tmp);
   }
   return 0;
 }

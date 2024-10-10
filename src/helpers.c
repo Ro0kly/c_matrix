@@ -19,6 +19,7 @@ double s21_determinant_recursive(matrix_t *A) {
       det +=
           pow(-1, 1 + i + 1) * A->matrix[0][i] * s21_determinant_recursive(&m);
     }
+    s21_remove_matrix(&m);
   }
   return det;
 }
