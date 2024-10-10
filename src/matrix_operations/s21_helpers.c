@@ -1,4 +1,4 @@
-#include "matrix_operations.h"
+#include "s21_matrix.h"
 
 double s21_determinant_recursive(matrix_t *A) {
   bool r1 = !s21_matrix_correct(A);
@@ -10,7 +10,6 @@ double s21_determinant_recursive(matrix_t *A) {
     matrix_t m = {0};
     s21_create_matrix(A->rows - 1, A->columns - 1, &m);
     s21_minor_matrix(A, 0, i, &m);
-    s21_print_matrix(&m);
     if (m.rows == 2 && m.columns == 2) {
       double res = 0;
       s21_2x2_determinant(&m, &res);

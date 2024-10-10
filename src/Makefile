@@ -1,13 +1,20 @@
-all: clean compile_and_use
-compile_and_use:
-	gcc -Wall -Werror -Wextra -g *.c
-	./a.out
-easy:
-	gcc *.c
-	./a.out
+CC = gcc -std=c11
+CFLAGS = -Wall -Werror -Wextra -g
+SOURCELIBFILESDIR = ./matrix_operations
+TESTFILE = s21_test.c
+TARGET = output
+
+all: clean s21_matrix.a test
+s21_matrix.a:
+	$(CC) $(CFLAGS) -c $(SOURCELIBFILESDIR)/*.c
+	ar rcs s21_matrix.a *.o
+	rm -rf *.o
+test:
+	$(CC) $(CFLAGS) $(TESTFILE) s21_matrix.a -o $(TARGET) -lcheck -lm -lsubunit
+	./$(TARGET)
 clean:
-	rm -rf ./a.out
+	rm -rf ./*.o *.a
 valgrind:
-	valgrind --tool=memcheck --leak-check=yes ./a.out
+	valgrind --tool=memcheck --leak-check=yes --track-origins=yes -s ./$(TARGET)
 leaks:
-	leaks -atExit -- ./a.out
+	leaks -atExit -- ./$(TARGET)

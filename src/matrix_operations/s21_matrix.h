@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define SUCCESS 1
+#define FAILURE 0
+
 typedef struct matrix_struct {
   double **matrix;
   int rows;
