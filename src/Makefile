@@ -21,6 +21,11 @@ gcov_report: clean s21_matrix.a
 clean:
 	rm -rf ./*.o *.a *.gcno *.gcda gcovreport gcovreport.info report $(TARGET)
 valgrind:
-	valgrind --tool=memcheck --leak-check=yes --track-origins=yes -s --leak-check=full --show-leak-kinds=all ./$(TARGET)
+	valgrind --tool=memcheck --leak-check=yes -s ./$(TARGET)
 leaks:
 	leaks -atExit -- ./$(TARGET)
+clang:
+	clang-format -i *.c
+	clang-format -i *.h
+	clang-format -i ./matrix_operations/*.c
+	clang-format -i ./matrix_operations/*.h

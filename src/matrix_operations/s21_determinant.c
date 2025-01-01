@@ -1,19 +1,18 @@
-#include "s21_matrix.h"
+#include "../s21_matrix.h"
 
 int s21_determinant(matrix_t *A, double *result) {
   operation_status status = OK;
   bool r1 = !s21_matrix_correct(A);
-  bool r2 = result == NULL;
   if (r1) {
     status = WRONG_MATRIX;
-  } else if (r2) {
+  } else if (!result) {
     status = CALCULATION_ERROR;
-  } else {
-    if (A->rows == 2 && A->columns == 2) {
-      s21_2x2_determinant(A, result);
-    } else {
-      *result = s21_determinant_recursive(A);
-    }
+  } else if (A->rows == 1 || A->columns == 1) {
+    *result = A->matrix[0][0];
+  } else if (A->rows == 2 && A->columns == 2) {
+    s21_2x2_determinant(A, result);
+  } else if (A->rows == A->columns) {
+    *result = s21_determinant_recursive(A);
   }
   return status;
 }

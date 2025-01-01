@@ -1,4 +1,4 @@
-#include "s21_matrix.h"
+#include "../s21_matrix.h"
 
 double s21_determinant_recursive(matrix_t *A) {
   double det = 0;
@@ -21,37 +21,29 @@ double s21_determinant_recursive(matrix_t *A) {
 
 void s21_2x2_determinant(matrix_t *matrix, double *result) {
   *result = matrix->matrix[0][0] * matrix->matrix[1][1] -
-              matrix->matrix[0][1] * matrix->matrix[1][0];
+            matrix->matrix[0][1] * matrix->matrix[1][0];
 }
 
-void s21_minor_matrix(matrix_t *matrix, int exclude_row_index, int exclude_column_index,
-                              matrix_t *result) {
+void s21_minor_matrix(matrix_t *matrix, int exclude_row_index,
+                      int exclude_column_index, matrix_t *result) {
   int new_i = 0, new_j = 0;
-    for (int i = 0; i < matrix->rows; i++) {
-      for (int j = 0; j < matrix->columns; j++) {
-        if (i != exclude_row_index && j != exclude_column_index) {
-          result->matrix[new_i][new_j] = matrix->matrix[i][j];
-          if (new_j == result->columns - 1) {
-            new_i += 1;
-            new_j = 0;
-          } else {
-            new_j += 1;
-          }
+  for (int i = 0; i < matrix->rows; i++) {
+    for (int j = 0; j < matrix->columns; j++) {
+      if (i != exclude_row_index && j != exclude_column_index) {
+        result->matrix[new_i][new_j] = matrix->matrix[i][j];
+        if (new_j == result->columns - 1) {
+          new_i += 1;
+          new_j = 0;
+        } else {
+          new_j += 1;
         }
       }
     }
+  }
 }
 
 bool s21_matrix_correct(matrix_t *matrix) {
-  int rule_1 = matrix != NULL && matrix->matrix != NULL;
-  if (!rule_1) {
-    return false;
-  }
-  int rule_2 = matrix->rows > 0 && matrix->columns > 0;
-  if (!rule_2) {
-    return false;
-  }
-  return true;
+  return matrix && matrix->rows > 0 && matrix->columns > 0;
 }
 
 bool s21_matrices_same_size(matrix_t *A, matrix_t *B) {
